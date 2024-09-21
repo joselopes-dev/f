@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code - X
+    
+  </title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Adicionando a biblioteca canvas-confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  <h2>Associe as respostas</h2>
+
+  <!-- Contêiner das áreas de drop -->
+  <div class="drop-area-container" id="drop-area-container">
+    <div class="drop-area" id="drop1" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+      Contém metadados sobre o documento</div>
+    <div class="drop-area" id="drop2" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+      Define o título da página que aparece na aba do navegador</div>
+    <div class="drop-area" id="drop3" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+      Todo o conteúdo da página é colocado dentro desta tag </div>
+    <div class="drop-area" id="drop4" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+      Fornece metadados, como a codificação de caracteres</div>
+    <div class="drop-area" id="drop5" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+      Usada para conectar o documento a arquivos externos</div>
+    <div class="drop-area" id="drop6" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+      Define estilos CSS diretamente no documento</div>
+    <div class="drop-area" id="drop7" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+      Define ou vincula scripts JavaScript</div>
+    <div class="drop-area" id="drop8" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+      Contém todo o conteúdo visível da página web</div>
+    <div class="drop-area" id="drop9" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+      Representam cabeçalhos</div>
+    <div class="drop-area" id="drop10" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+      Define um parágrafo de texto</div>
+    <div class="drop-area" id="drop11" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+      Cria um link para outra página ou recurso</div>
+    <div class="drop-area" id="drop12" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"> 
+      Insere uma imagem no documento</div>
+  </div>
+
+  <!-- Imagens arrastáveis -->
+  <div class="conteine1">
+    <div class="drag-container" id="drag-container">
+      <img id="img1" src="imagens/imagem_head.png" draggable="true" ondragstart="drag(event)" alt="Imagem 1">
+      <img id="img2" src="imagens/imagem_title.png" draggable="true" ondragstart="drag(event)" alt="Imagem 2">
+      <img id="img3" src="imagens/tags-html.png" draggable="true" ondragstart="drag(event)" alt="Imagem 3">
+      <img id="img4" src="imagens/imagem_meta.png" draggable="true" ondragstart="drag(event)" alt="Imagem 4">
+      <img id="img5" src="imagens/imagem_link.png" draggable="true" ondragstart="drag(event)" alt="Imagem 5">
+      <img id="img6" src="imagens/imagem_style.png" draggable="true" ondragstart="drag(event)" alt="Imagem 6">
+      <img id="img7" src="imagens/imagem_script.png" draggable="true" ondragstart="drag(event)" alt="Imagem 7">
+      <img id="img8" src="imagens/imagem_bory.png" draggable="true" ondragstart="drag(event)" alt="Imagem 8">
+      <img id="img9" src="imagens/imagem_h1_h6.png" draggable="true" ondragstart="drag(event)" alt="Imagem 9">
+      <img id="img10" src="imagens/imagem_p.png" draggable="true" ondragstart="drag(event)" alt="Imagem 10">
+      <img id="img11" src="imagens/imagem_a.png" draggable="true" ondragstart="drag(event)" alt="Imagem 11">
+      <img id="img12" src="imagens/imagem_img.png" draggable="true" ondragstart="drag(event)" alt="Imagem 12">
+    </div> 
+  </div>
+
+  <div class="botoes">
+    <button class="proximo1" onclick="restartGame()">Reiniciar Jogo</button> <!-- Botão para reiniciar o jogo -->
+    <button class="proximo"><a href="#">Próximo</a></button>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

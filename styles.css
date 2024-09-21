@@ -1,0 +1,115 @@
+/* Estilização básica */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-image: url(imagens/home-background-mobile.png);
+  }
+
+  h2 {
+    color: white;
+  }
+  
+  .drag-container {
+    margin-top: 20px;
+  }
+  
+  img {
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    cursor: grab;
+  }
+  
+  .drop-area {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    margin: 20px;
+    display: inline-block;
+    width: 150px;
+    height: 150px; /* Garantir altura fixa */
+    background-color: #f9f9f9;
+    vertical-align: top; /* Mantém as áreas no topo, mesmo ao receber uma imagem */
+    transition: background-color 0.3s;
+    font-size: 15px;
+  }
+
+  
+  .drop-area img {
+    width: 100%; /* Ajusta a imagem ao espaço da área de drop */
+    height: auto;
+    max-width: 70px; /* Limita o tamanho máximo da imagem */
+  }
+  
+  .drop-area:hover {
+    background-color: #eee;
+  }
+
+  .proximo1 {
+    width: 100px;
+    height: 30px;
+    border-radius: 10px;
+  }
+
+  .proximo {
+    width: 100px;
+    height: 30px;
+    border-radius: 10px;
+  }
+
+  button:hover {
+    background-color: aqua;
+    color: orange;
+
+  }
+
+  .botoes {
+    margin: 20px;
+  }
+
+  .proximo a {
+    text-decoration:none;
+    color: black;
+  }
+
+  a:hover{
+    color: orange;
+  }
+
+  @media (max-width: 640px){
+    img {
+      width: 50px;
+      height: 30px;
+      margin: 1px;
+      cursor: grab;
+    }
+    
+    .drop-area {
+      border: 2px dashed #ccc;
+      padding: 5px;
+      margin: 5px;
+      display: inline-block;
+      width: 80px;
+      height: 100px; /* Garantir altura fixa */
+      background-color: white;
+      vertical-align: top; /* Mantém as áreas no topo, mesmo ao receber uma imagem */
+      transition: background-color 0.3s;
+      font-size: 10px;
+      text-align: center;
+      
+    }
+
+    .drop-area img {
+      width: 100%; /* Ajusta a imagem ao espaço da área de drop */
+      height: auto;
+      max-width: 40px; /* Limita o tamanho máximo da imagem */
+    }
+
+    .drag-container {
+      margin-top: 10px;
+    }
+
+    .drop-area-container {
+      gap: 5px;
+    }
+    }
+  
