@@ -1,47 +1,47 @@
 // Permitir que os elementos possam ser soltos
 function allowDrop(event) {
   event.preventDefault();
+  if (event.type === 'dragover' || event.type === 'touchmove') {
+    event.currentTarget.classList.add('drag-over');
+  }
 }
 
-// Função chamada quando o item começa a ser arrastado
+// Função chamada quando o item começa a ser arrastado com mouse
 function drag(event) {
   event.dataTransfer.setData("imageId", event.target.id);
 }
 
-// Função para soltar a imagem na área designada
+// Função chamada quando o item deixa a área de drop com mouse
+function dragLeave(event) {
+  event.currentTarget.classList.remove('drag-over');
+}
+
+// Função para soltar a imagem na área designada com mouse
 function drop(event) {
   event.preventDefault();
+  event.currentTarget.classList.remove('drag-over');
+  
   var imageId = event.dataTransfer.getData("imageId");
   var droppedElement = document.getElementById(imageId);
   
-  // Verificar se a imagem solta corresponde ao ID correto
   if (checkAnswer(imageId, event.target.id)) {
-    // Se a resposta estiver correta, coloca a imagem no final da área de drop
     var dropArea = event.target;
+    var textContent = dropArea.innerHTML;
+    dropArea.innerHTML = "";
 
-    // Criar um contêiner para manter o texto e a imagem separadamente
-    var textContent = dropArea.innerHTML; // Salvar o texto atual
-    dropArea.innerHTML = ""; // Limpar o conteúdo da drop-area
-
-    // Criar um parágrafo para o texto e adicionar de volta à área
     var textElement = document.createElement("p");
     textElement.innerHTML = textContent;
-    dropArea.appendChild(textElement); // Adicionar o texto de volta
+    dropArea.appendChild(textElement);
 
-    // Adicionar a imagem abaixo do texto
     dropArea.appendChild(droppedElement); 
-
-    // Se estiver correto, joga confetes!
     throwConfetti();
   } else {
-    // Se a resposta estiver errada, a imagem retorna para a posição original
     resetPosition(droppedElement);
   }
 }
 
 // Função para validar a resposta correta
 function checkAnswer(imageId, dropAreaId) {
-  // Lógica de validação
   return (imageId === "img1" && dropAreaId === "drop1") ||
          (imageId === "img2" && dropAreaId === "drop2") ||
          (imageId === "img3" && dropAreaId === "drop3") ||
@@ -59,9 +59,9 @@ function checkAnswer(imageId, dropAreaId) {
 // Função para jogar confetes 🎉
 function throwConfetti() {
   confetti({
-    particleCount: 100,   // Número de partículas de confete
-    spread: 70,           // Ângulo de espalhamento dos confetes
-    origin: { y: 0.6 },   // Origem do disparo (ajustado para o meio da tela)
+    particleCount: 100,
+    spread: 70,
+    origin: { y: 0.6 },
   });
 }
 
@@ -75,41 +75,152 @@ function resetPosition(element) {
 function shuffleElements(container) {
   var elementsArray = Array.from(container.children);
   
-  // Função de embaralhamento (algoritmo de Fisher-Yates)
   for (let i = elementsArray.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
-    container.appendChild(elementsArray[j]); // Reposiciona os elementos embaralhados no container
+    container.appendChild(elementsArray[j]);
   }
 }
 
 // Função para reiniciar o jogo
 function restartGame() {
-  // Retorna as imagens para o contêiner original
   var container = document.getElementById('drag-container');
   var dropAreas = document.querySelectorAll('.drop-area');
   
   dropAreas.forEach(function(area) {
     var imagesInDropArea = area.querySelectorAll('img');
     imagesInDropArea.forEach(function(image) {
-      container.appendChild(image); // Reposiciona as imagens no contêiner original
+      container.appendChild(image);
     });
   });
 
-  // Embaralha as imagens no contêiner
   shuffleElements(container);
-
-  // Embaralha as áreas de drop
-  var dropContainer = document.getElementById('drop-area-container');
-  shuffleElements(dropContainer);
+  shuffleElements(document.getElementById('drop-area-container'));
 }
 
-// Embaralhar ao carregar a página
+// Objeto para gerenciar dados de toque
+let touchData = {
+  dragging: false,
+  draggedElement: null,
+  originalParent: null,
+  startX: 0,
+  startY: 0,
+  currentX: 0,
+  currentY: 0,
+  clone: null
+};
+
+// Iniciar o toque
+function touchStart(event) {
+  event.preventDefault();
+  
+  if (event.target.tagName.toLowerCase() === 'img') {
+    touchData.dragging = true;
+    touchData.draggedElement = event.target;
+    touchData.originalParent = event.target.parentElement;
+    const touch = event.touches[0];
+    touchData.startX = touch.clientX;
+    touchData.startY = touch.clientY;
+    
+    // Criar um clone para seguir o toque
+    touchData.clone = event.target.cloneNode(true);
+    touchData.clone.style.position = 'absolute';
+    touchData.clone.style.pointerEvents = 'none';
+    touchData.clone.style.opacity = '0.8';
+    touchData.clone.style.left = `${touch.clientX}px`;
+    touchData.clone.style.top = `${touch.clientY}px`;
+    document.body.appendChild(touchData.clone);
+  }
+}
+
+// Movimentar o toque
+function touchMove(event) {
+  if (!touchData.dragging) return;
+  
+  const touch = event.touches[0];
+  touchData.currentX = touch.clientX;
+  touchData.currentY = touch.clientY;
+  
+  if (touchData.clone) {
+    touchData.clone.style.left = `${touch.clientX}px`;
+    touchData.clone.style.top = `${touch.clientY}px`;
+  }
+
+  // Adicionar classe de drag-over se estiver sobre uma drop area
+  const dropTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+  if (dropTarget && dropTarget.classList.contains('drop-area')) {
+    dropTarget.classList.add('drag-over');
+  }
+
+  // Remover a classe de drag-over de outras drop areas
+  document.querySelectorAll('.drop-area').forEach(function(area) {
+    if (area !== dropTarget) {
+      area.classList.remove('drag-over');
+    }
+  });
+}
+
+// Finalizar o toque
+function touchEnd(event) {
+  if (!touchData.dragging) return;
+  
+  touchData.dragging = false;
+  
+  if (touchData.clone) {
+    document.body.removeChild(touchData.clone);
+    touchData.clone = null;
+  }
+  
+  // Remover todas as classes de drag-over
+  document.querySelectorAll('.drop-area').forEach(function(area) {
+    area.classList.remove('drag-over');
+  });
+  
+  // Detectar o elemento sob o toque
+  const dropTarget = document.elementFromPoint(touchData.currentX, touchData.currentY);
+  
+  if (dropTarget && dropTarget.classList.contains('drop-area')) {
+    const imageId = touchData.draggedElement.id;
+    const dropAreaId = dropTarget.id;
+    
+    if (checkAnswer(imageId, dropAreaId)) {
+      var dropArea = dropTarget;
+      var textContent = dropArea.innerHTML;
+      dropArea.innerHTML = "";
+
+      var textElement = document.createElement("p");
+      textElement.innerHTML = textContent;
+      dropArea.appendChild(textElement);
+
+      dropArea.appendChild(touchData.draggedElement); 
+      throwConfetti();
+    } else {
+      resetPosition(touchData.draggedElement);
+    }
+  } else {
+    resetPosition(touchData.draggedElement);
+  }
+}
+
+// Adicionar eventos de toque aos elementos arrastáveis
+function addTouchSupport() {
+  const draggableImages = document.querySelectorAll('.drag-container img');
+  
+  draggableImages.forEach(function(img) {
+    img.addEventListener('touchstart', touchStart, false);
+    img.addEventListener('touchmove', touchMove, false);
+    img.addEventListener('touchend', touchEnd, false);
+  });
+}
+
+// Embaralhar ao carregar a página e adicionar suporte a toque
 document.addEventListener("DOMContentLoaded", function() {
   var container = document.getElementById('drag-container');
   var dropContainer = document.getElementById('drop-area-container');
 
-  // Embaralha as imagens e as áreas de drop
   shuffleElements(container);
   shuffleElements(dropContainer);
+  
+  // Adicionar suporte a toque
+  addTouchSupport();
 });
 
